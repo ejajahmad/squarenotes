@@ -4,6 +4,8 @@ interface AppContextType {
     default?: string;
     isLogin?: boolean;
     setIsLogin?: (isLogin: boolean) => void;
+    keepLoggedIn?: boolean;
+    setKeepLoggedIn?: (keepLoggedIn: boolean) => void;
     loginToken?: {
         displayName?: string;
         email?: string;
@@ -24,6 +26,8 @@ interface AppContextType {
         refreshToken?: string;
         registered?: boolean;
     }) => void;
+    saveLoginStateInLocalStorage: () => void;
+    loadLoginStateFromLocalStorage: () => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -34,16 +38,39 @@ interface Props {
 
 export default function AppContextProvider({ children, ...props }: Props) {
     const [isLogin, setIsLogin] = useState(false);
+    const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [loginToken, setLoginToken] =
         useState<AppContextType['loginToken']>();
+
+    const saveLoginStateInLocalStorage = () => {
+        localStorage.setItem('keepLoggedIn', JSON.stringify(keepLoggedIn));
+        localStorage.setItem('loginToken', JSON.stringify(loginToken));
+    };
+
+    const loadLoginStateFromLocalStorage = () => {
+        const keepLoggedIn = localStorage.getItem('keepLoggedIn');
+
+        if (keepLoggedIn) {
+            setKeepLoggedIn(JSON.parse(keepLoggedIn));
+            setIsLogin(true);
+        }
+        const loginToken = localStorage.getItem('loginToken');
+        if (loginToken) {
+            setLoginToken(JSON.parse(loginToken));
+        }
+    };
 
     return (
         <AppContext.Provider
             value={{
                 isLogin,
                 setIsLogin,
+                keepLoggedIn,
+                setKeepLoggedIn,
                 loginToken,
-                setLoginToken
+                setLoginToken,
+                saveLoginStateInLocalStorage,
+                loadLoginStateFromLocalStorage
             }}
         >
             {children}

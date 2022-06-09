@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../service/context/AppContextProvider';
 
 import { signInWithEmailAndPassword } from '../../service/firebase/authentication';
 
 export const SigninForm = () => {
-    const { isLogin, setIsLogin } = useAppContext();
+    const { isLogin, setIsLogin, setLoginToken, setKeepLoggedIn, keepLoggedIn saveLoginStateInLocalStorage } = useAppContext();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -15,6 +15,18 @@ export const SigninForm = () => {
 
     const handleSignin = (e: React.ChangeEvent<any>) => {
         e.preventDefault();
+
+        const keepLoggedInState =  localStorage.getItem('keepLoggedIn') 
+        const loginTokenState = localStorage.getItem('loginToken')
+
+        if (keepLoggedInState) {
+            setKeepLoggedIn(JSON.parse(keepLoggedInState));
+        }
+
+        if (loginTokenState) {
+            setLoginToken(JSON.parse(loginTokenState));
+        }
+    
         if (email.length === 0 || password.length === 0) {
             setError('Please enter email and password');
             return;
@@ -27,6 +39,9 @@ export const SigninForm = () => {
                     return;
                 } else if (response.refreshToken) {
                     setIsLogin(true);
+                    if (keepLoggedIn) {
+                        saveLoginStateInLocalStorage();
+                    }
                     navigate('/dashboard');
                 }
             })
@@ -35,6 +50,12 @@ export const SigninForm = () => {
                 setError(error?.message);
             });
     };
+
+    useEffect(() => {
+        if (isLogin) {
+            navigate('/dashboard');
+        }
+    }, [isLogin]);
 
     return (
         <form className="w-full max-w-sm">
@@ -93,6 +114,11 @@ export const SigninForm = () => {
                                 className="mr-2 leading-tight"
                                 type="checkbox"
                                 id="grid-checkbox"
+                                onChange={(e) =>
+                                    setKeepLoggedIn(
+                                        (prevState: boolean) => !prevState
+                                    )
+                                }
                             />
                             <label
                                 className="text-sm text-gray-600"
