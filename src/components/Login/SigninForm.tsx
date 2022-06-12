@@ -5,7 +5,14 @@ import { useAppContext } from '../../service/context/AppContextProvider';
 import { signInWithEmailAndPassword } from '../../service/firebase/authentication';
 
 export const SigninForm = () => {
-    const { isLogin, setIsLogin, setLoginToken, setKeepLoggedIn, keepLoggedIn saveLoginStateInLocalStorage } = useAppContext();
+    const {
+        isLogin,
+        setIsLogin,
+        setLoginToken,
+        setKeepLoggedIn,
+        keepLoggedIn,
+        saveLoginStateInLocalStorage
+    } = useAppContext();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,8 +23,8 @@ export const SigninForm = () => {
     const handleSignin = (e: React.ChangeEvent<any>) => {
         e.preventDefault();
 
-        const keepLoggedInState =  localStorage.getItem('keepLoggedIn') 
-        const loginTokenState = localStorage.getItem('loginToken')
+        const keepLoggedInState = localStorage.getItem('keepLoggedIn');
+        const loginTokenState = localStorage.getItem('loginToken');
 
         if (keepLoggedInState) {
             setKeepLoggedIn(JSON.parse(keepLoggedInState));
@@ -26,7 +33,7 @@ export const SigninForm = () => {
         if (loginTokenState) {
             setLoginToken(JSON.parse(loginTokenState));
         }
-    
+
         if (email.length === 0 || password.length === 0) {
             setError('Please enter email and password');
             return;
@@ -39,6 +46,7 @@ export const SigninForm = () => {
                     return;
                 } else if (response.refreshToken) {
                     setIsLogin(true);
+                    setLoginToken(response);
                     if (keepLoggedIn) {
                         saveLoginStateInLocalStorage();
                     }

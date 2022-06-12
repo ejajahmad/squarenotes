@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 // import svg as react component
 import { ReactComponent as Logo } from '../../assets/sqaurenotelogo.svg';
 import { ReactComponent as GirlIllustration } from '../../assets/loginillustration-01.svg';
@@ -6,9 +8,29 @@ import { SigninForm } from './SigninForm';
 import { AiOutlineGoogle, AiOutlineTwitter } from 'react-icons/ai';
 import { FaFacebookF } from 'react-icons/fa';
 import { SignupForm } from './SignupForm';
+import { useAppContext } from '../../service/context/AppContextProvider';
 
 export default function LoginContainer() {
     const [isSignIn, setIsSignIn] = useState(true);
+
+    const {
+        loadLoginStateFromLocalStorage,
+        keepLoggedIn,
+        isLogin,
+        setIsLogin
+    } = useAppContext();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        loadLoginStateFromLocalStorage();
+
+        if (keepLoggedIn) {
+            setIsLogin(true);
+            navigate('/dashboard');
+        }
+    }, []);
+
     return (
         <div className="w-full h-full flex flex-col md:flex-row dark:text-gray-200 lg:min-w-[90%]  lg:min-h-[90%] min-w-full min-h-full bg-white dark:bg-gray-900 max-w-screen-xl rounded-md py-20 px-20">
             {/* CONTAINER 1 - ILLUSTRATION */}

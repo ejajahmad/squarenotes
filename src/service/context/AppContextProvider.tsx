@@ -44,7 +44,6 @@ export default function AppContextProvider({ children, ...props }: Props) {
 
     const saveLoginStateInLocalStorage = () => {
         localStorage.setItem('keepLoggedIn', JSON.stringify(keepLoggedIn));
-        localStorage.setItem('loginToken', JSON.stringify(loginToken));
     };
 
     const loadLoginStateFromLocalStorage = () => {
@@ -53,10 +52,6 @@ export default function AppContextProvider({ children, ...props }: Props) {
         if (keepLoggedIn) {
             setKeepLoggedIn(JSON.parse(keepLoggedIn));
             setIsLogin(true);
-        }
-        const loginToken = localStorage.getItem('loginToken');
-        if (loginToken) {
-            setLoginToken(JSON.parse(loginToken));
         }
     };
 
