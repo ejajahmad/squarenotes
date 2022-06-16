@@ -26,11 +26,15 @@ interface AppContextType {
         refreshToken?: string;
         registered?: boolean;
     }) => void;
-    saveLoginStateInLocalStorage: () => void;
-    loadLoginStateFromLocalStorage: () => void;
+    saveLoginStateInLocalStorage?: () => void;
+    loadLoginStateFromLocalStorage?: () => void;
+    userToken?: string;
+    setUserToken?: (userToken: string) => void;
+    showSidebar?: boolean;
+    setShowSidebar?: (showSidebar: boolean) => void;
 }
 
-const AppContext = createContext<AppContextType | null>(null);
+const AppContext = createContext<AppContextType>({});
 
 interface Props {
     children?: React.ReactNode;
@@ -41,9 +45,14 @@ export default function AppContextProvider({ children, ...props }: Props) {
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [loginToken, setLoginToken] =
         useState<AppContextType['loginToken']>();
+    const [userToken, setUserToken] = useState('');
+
+    const [showSidebar, setShowSidebar] = useState(true);
 
     const saveLoginStateInLocalStorage = () => {
         localStorage.setItem('keepLoggedIn', JSON.stringify(keepLoggedIn));
+        // userToken?.length > 0 &&
+        //     localStorage.setItem('userToken', JSON.stringify(userToken));
     };
 
     const loadLoginStateFromLocalStorage = () => {
@@ -52,6 +61,11 @@ export default function AppContextProvider({ children, ...props }: Props) {
         if (keepLoggedIn) {
             setKeepLoggedIn(JSON.parse(keepLoggedIn));
             setIsLogin(true);
+        }
+
+        const userToken = localStorage.getItem('userToken');
+        if (userToken) {
+            setUserToken(JSON.parse(userToken));
         }
     };
 
@@ -65,7 +79,11 @@ export default function AppContextProvider({ children, ...props }: Props) {
                 loginToken,
                 setLoginToken,
                 saveLoginStateInLocalStorage,
-                loadLoginStateFromLocalStorage
+                loadLoginStateFromLocalStorage,
+                userToken,
+                setUserToken,
+                showSidebar,
+                setShowSidebar
             }}
         >
             {children}

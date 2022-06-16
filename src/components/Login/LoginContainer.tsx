@@ -23,10 +23,10 @@ export default function LoginContainer() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadLoginStateFromLocalStorage();
+        loadLoginStateFromLocalStorage && loadLoginStateFromLocalStorage();
 
         if (keepLoggedIn) {
-            setIsLogin(true);
+            setIsLogin && setIsLogin(true);
             navigate('/dashboard');
         }
     }, []);

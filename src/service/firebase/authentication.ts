@@ -59,3 +59,26 @@ export const signInWithEmailAndPassword = async (
         throw new Error(error.message);
     }
 };
+
+export const getUser = async (idToken: string) => {
+    try {
+        const response = await fetch(
+            `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_API_KEY}
+        `,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idToken: idToken
+                })
+            }
+        );
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData;
+    } catch (error) {
+        console.error(error);
+    }
+};

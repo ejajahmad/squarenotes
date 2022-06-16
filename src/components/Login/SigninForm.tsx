@@ -11,7 +11,9 @@ export const SigninForm = () => {
         setLoginToken,
         setKeepLoggedIn,
         keepLoggedIn,
-        saveLoginStateInLocalStorage
+        saveLoginStateInLocalStorage,
+        setUserToken,
+        userToken
     } = useAppContext();
 
     const [email, setEmail] = useState('');
@@ -25,19 +27,21 @@ export const SigninForm = () => {
 
         const keepLoggedInState = localStorage.getItem('keepLoggedIn');
         const loginTokenState = localStorage.getItem('loginToken');
+        const userTokenState = localStorage.getItem('userToken');
 
         if (keepLoggedInState) {
-            setKeepLoggedIn(JSON.parse(keepLoggedInState));
+            setKeepLoggedIn && setKeepLoggedIn(JSON.parse(keepLoggedInState));
         }
 
-        if (loginTokenState) {
-            setLoginToken(JSON.parse(loginTokenState));
+        if (userTokenState) {
+            setLoginToken && setLoginToken(JSON.parse(userTokenState));
         }
 
         if (email.length === 0 || password.length === 0) {
             setError('Please enter email and password');
             return;
         }
+
         signInWithEmailAndPassword(email, password)
             .then((response) => {
                 console.log(response);
@@ -45,17 +49,26 @@ export const SigninForm = () => {
                     setError(response?.error?.message.replaceAll('_', ' '));
                     return;
                 } else if (response.refreshToken) {
-                    setIsLogin(true);
-                    setLoginToken(response);
-                    if (keepLoggedIn) {
-                        saveLoginStateInLocalStorage();
-                    }
-                    navigate('/dashboard');
+                    console.log(response.idToken);
+                    setIsLogin && setIsLogin(true);
+                    setLoginToken && setLoginToken(response);
+                    setUserToken && setUserToken(response.localId);
+                    localStorage.setItem(
+                        'userToken',
+                        JSON.stringify(response.localId)
+                    );
                 }
             })
             .catch((error) => {
                 console.log(error);
                 setError(error?.message);
+            })
+            .finally(() => {
+                if (keepLoggedIn) {
+                    saveLoginStateInLocalStorage &&
+                        saveLoginStateInLocalStorage();
+                }
+                navigate('/dashboard');
             });
     };
 
@@ -123,9 +136,8 @@ export const SigninForm = () => {
                                 type="checkbox"
                                 id="grid-checkbox"
                                 onChange={(e) =>
-                                    setKeepLoggedIn(
-                                        (prevState: boolean) => !prevState
-                                    )
+                                    setKeepLoggedIn &&
+                                    setKeepLoggedIn(!keepLoggedIn)
                                 }
                             />
                             <label

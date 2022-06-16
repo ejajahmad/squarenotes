@@ -10,9 +10,7 @@ function App() {
                 darkTheme ? 'dark' : ''
             } h-screen flex items-center justify-center bg-orange-300`}
         >
-            <div>
-                <Routes />
-            </div>
+            <Routes />
         </div>
     );
 }
