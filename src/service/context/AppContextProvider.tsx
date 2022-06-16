@@ -53,6 +53,8 @@ interface AppContextType {
     showSidebar?: boolean;
     setShowSidebar?: (showSidebar: boolean) => void;
     logoutUser?: () => Promise<void>;
+    showNoteCreator?: boolean;
+    setShowNoteCreator?: (showNoteCreator: boolean) => void;
 }
 
 // @ts-ignore
@@ -67,6 +69,7 @@ export default function AppContextProvider({ children, ...props }: Props) {
     const [userToken, setUserToken] = useState('');
 
     const [showSidebar, setShowSidebar] = useState(true);
+    const [showNoteCreator, setShowNoteCreator] = useState(false);
 
     const saveLoginStateInLocalStorage = () => {
         localStorage.setItem('keepLoggedIn', JSON.stringify(keepLoggedIn));
@@ -114,7 +117,9 @@ export default function AppContextProvider({ children, ...props }: Props) {
                 setUserToken,
                 showSidebar,
                 setShowSidebar,
-                logoutUser
+                logoutUser,
+                showNoteCreator,
+                setShowNoteCreator
             }}
         >
             {children}
