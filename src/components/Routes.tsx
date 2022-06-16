@@ -5,11 +5,11 @@ import {
     Route
 } from 'react-router-dom';
 import Dashboard from './Dashboard/Dashboard';
-import NotesContainer from './Dashboard/NotesContainer';
-import ProfileContainer from './Dashboard/ProfileContainer';
-import SettingsContainer from './Dashboard/SettingsContainer';
-import StarredContainer from './Dashboard/StarredContainer';
-import TrashContainer from './Dashboard/TrashContainer';
+import NotesContainer from './Notes/NotesContainer';
+import ProfileContainer from './Profile/ProfileContainer';
+import SettingsContainer from './Settings/SettingsContainer';
+import StarredContainer from './Notes/StarredContainer';
+import TrashContainer from './Notes/TrashContainer';
 import LoginContainer from './Login/LoginContainer';
 
 export default function Routes() {

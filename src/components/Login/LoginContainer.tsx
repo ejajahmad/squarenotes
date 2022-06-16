@@ -32,7 +32,7 @@ export default function LoginContainer() {
     }, []);
 
     return (
-        <div className="w-full h-full flex flex-col md:flex-row dark:text-gray-200 lg:min-w-[90%]  lg:min-h-[90%] min-w-full min-h-full bg-white dark:bg-gray-900 max-w-screen-xl rounded-md py-20 px-20">
+        <div className=" flex flex-col md:flex-row dark:text-gray-200 lg:min-w-[90%]  lg:min-h-[90%] min-w-full min-h-full bg-white dark:bg-gray-900  rounded-md py-20 px-20 max-h-[90%] xl:max-w-lg ">
             {/* CONTAINER 1 - ILLUSTRATION */}
             <div className="w-full flex flex-col items-center justify-center">
                 <div className=" h-full flex flex-col  justify-center">

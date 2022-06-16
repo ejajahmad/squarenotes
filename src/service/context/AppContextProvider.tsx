@@ -1,6 +1,26 @@
 import React, { useState, createContext, useContext } from 'react';
 
+interface Props {
+    children?: React.ReactNode;
+}
+
+type NoteType = {
+    id: string;
+    title: string;
+    content: string;
+    isStarred?: boolean;
+    createdAt: string;
+    updatedAt: string;
+    dueDate?: string;
+    color?: string;
+    isArchived?: boolean;
+    isTrashed?: boolean;
+    isPinned?: boolean;
+};
+
 interface AppContextType {
+    notes: NoteType[];
+    setNotes: (notes: NoteType[]) => void;
     default?: string;
     isLogin?: boolean;
     setIsLogin?: (isLogin: boolean) => void;
@@ -35,13 +55,11 @@ interface AppContextType {
     logoutUser?: () => Promise<void>;
 }
 
+// @ts-ignore
 const AppContext = createContext<AppContextType>({});
 
-interface Props {
-    children?: React.ReactNode;
-}
-
 export default function AppContextProvider({ children, ...props }: Props) {
+    const [notes, setNotes] = useState<NoteType[]>([]);
     const [isLogin, setIsLogin] = useState(false);
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [loginToken, setLoginToken] =
@@ -82,6 +100,8 @@ export default function AppContextProvider({ children, ...props }: Props) {
     return (
         <AppContext.Provider
             value={{
+                notes,
+                setNotes,
                 isLogin,
                 setIsLogin,
                 keepLoggedIn,
