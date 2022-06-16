@@ -5,7 +5,7 @@ import { Transition } from '@headlessui/react';
 import { MdNotes } from 'react-icons/md';
 import { AiFillStar, AiOutlineSetting } from 'react-icons/ai';
 import { FiTrash2 } from 'react-icons/fi';
-import { BiUser } from 'react-icons/bi';
+import { BiUser, BiLogOutCircle } from 'react-icons/bi';
 
 import { ReactComponent as Logo } from '../../assets/sqaurenotelogo.svg';
 
@@ -22,7 +22,7 @@ export default function Sidebar() {
             leaveTo="opacity-0"
         >
             <div
-                className={`max-w-[250px]  h-full bg-slate-200 transition-all rounded-md`}
+                className={`max-w-[250px]  h-full bg-slate-200 transition-all rounded-md relative`}
             >
                 <ul className="flex flex-col justify-center">
                     <li className="flex-1">
@@ -106,6 +106,17 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
                 </ul>
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        isActive ? 'bg-slate-300' : undefined
+                    }
+                >
+                    <div className=" p-4 text-slate-500 hover:bg-slate-300 flex items-center gap-2  px-8 w-full absolute bottom-0  ">
+                        <BiLogOutCircle size={20} />
+                        Log Out
+                    </div>
+                </NavLink>
             </div>
         </Transition>
     );
