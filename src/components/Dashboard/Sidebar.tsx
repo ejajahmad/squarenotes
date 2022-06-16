@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../service/context/AppContextProvider';
 import { Transition } from '@headlessui/react';
 import { MdNotes } from 'react-icons/md';
@@ -10,7 +10,8 @@ import { BiUser, BiLogOutCircle } from 'react-icons/bi';
 import { ReactComponent as Logo } from '../../assets/sqaurenotelogo.svg';
 
 export default function Sidebar() {
-    const { showSidebar } = useAppContext();
+    const { showSidebar, isLogin, setIsLogin, logoutUser } = useAppContext();
+    const navigate = useNavigate();
     return (
         <Transition
             show={showSidebar}
@@ -106,17 +107,15 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
                 </ul>
-                <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                        isActive ? 'bg-slate-300' : undefined
-                    }
+                <div
+                    className=" p-4 text-slate-500 hover:bg-slate-300 flex items-center gap-2  px-8 w-full absolute bottom-0"
+                    onClick={() => {
+                        logoutUser && logoutUser().then(() => navigate('/'));
+                    }}
                 >
-                    <div className=" p-4 text-slate-500 hover:bg-slate-300 flex items-center gap-2  px-8 w-full absolute bottom-0  ">
-                        <BiLogOutCircle size={20} />
-                        Log Out
-                    </div>
-                </NavLink>
+                    <BiLogOutCircle size={20} />
+                    Log Out
+                </div>
             </div>
         </Transition>
     );

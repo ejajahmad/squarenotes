@@ -32,6 +32,7 @@ interface AppContextType {
     setUserToken?: (userToken: string) => void;
     showSidebar?: boolean;
     setShowSidebar?: (showSidebar: boolean) => void;
+    logoutUser?: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType>({});
@@ -69,6 +70,15 @@ export default function AppContextProvider({ children, ...props }: Props) {
         }
     };
 
+    const logoutUser = async () => {
+        setIsLogin(false);
+        setKeepLoggedIn(false);
+        setLoginToken(undefined);
+        setUserToken('');
+        localStorage.removeItem('keepLoggedIn');
+        localStorage.removeItem('userToken');
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -83,7 +93,8 @@ export default function AppContextProvider({ children, ...props }: Props) {
                 userToken,
                 setUserToken,
                 showSidebar,
-                setShowSidebar
+                setShowSidebar,
+                logoutUser
             }}
         >
             {children}
